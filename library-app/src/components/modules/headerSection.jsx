@@ -44,6 +44,12 @@ const Header = ({setEditingBook, setEditingMember, setErrors}) => {
             setEditingMember(null)
             setErrors(null)
           }} style={{ cursor: 'pointer' }} className="text-white fw-bold text-decoration-none fs-5">Books Search</span>
+           <span onClick={() => {
+            navigate(`/borrow`)
+            setEditingBook(null)
+            setEditingMember(null)
+            setErrors(null)
+          }} style={{ cursor: 'pointer' }} className="text-white fw-bold text-decoration-none fs-5">Borrow Book</span>
         </div>
       </div>
       {/* Greeting Message */}

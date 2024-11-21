@@ -1,11 +1,13 @@
-import axios from 'axios';
 import FormLayout from '../templates/FormLayout';
 import LoadingSpinner from '../elements/loading';
 import { useEffect, useState } from 'react';
 import BorrowBookForm from '../modules/borrowBookForm';
 import { failedSwal, successSwal } from '../../helper';
+import UserService from '../../services/userService';
+import BookService from '../../services/bookService';
+import BorrowService from '../../services/borrowService';
 
-function BorrowFormPage({ books, members, setBooks, setMembers, errors, setErrors }) {
+function BorrowFormPage({ books, members, setBooks, setMembers, setErrors }) {
     const [loading, setLoading] = useState(true);
     const [ErrorStatus, setErrorStatus] = useState();
 
@@ -14,10 +16,10 @@ function BorrowFormPage({ books, members, setBooks, setMembers, errors, setError
             try {
                 // let response = await request('get','/User');
                 // setMembers(response);
-                let response = await axios.get(`http://localhost:5184/User`)
-                await setBooks(response.data.data)
+                let response = await UserService.getAll();
+                await setMembers(response.data.data)
 
-                let dresponse = await axios.get(`http://localhost:5184/Book`)
+                let dresponse = await BookService.getAll();
                 await setBooks(dresponse.data.data)
             }
             catch (error) {
@@ -35,11 +37,11 @@ function BorrowFormPage({ books, members, setBooks, setMembers, errors, setError
 
     const submitBookForm = async (borrow) => {
         try {
-            await axios.post('http://localhost:5184/Borrowing', borrow)
+            console.log(borrow)
+            await BorrowService.borrow(borrow)
             successSwal('borrow request succes created')
-           
-
         } catch (error) {
+            console.log(error.response)
             setErrors(error.response.data)
             failedSwal(error.response.data)
             return error.response.data;

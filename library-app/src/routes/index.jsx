@@ -15,7 +15,7 @@ import BooksPage from "../components/pages/booksPage";
 // Initial data and functions for book management
 const columnsTableBooks = ["Title", "Author", "Category", "ISBN", "Language", "Detail"];
 const columnsTableBooksCrud = ["Title", "Author", "Category", "ISBN", "Language", "Edit", "Delete", "Detail"];
-const columnsTableMembers = ["Id", "Full Name", "Email", "Gender", "Phone", "Address", "Edit", "Delete", "Detail"];
+const columnsTableMembers = ["Id", "Full Name", "Position", "Privilege", "Edit", "Delete", "Detail"];
 
 const AppRouter = () => {
     const [books, setBooks] = useState();
@@ -160,17 +160,10 @@ const AppRouter = () => {
                         setMembers={setMembers} 
                         books={books}
                         setBooks={setBooks}
-                        errors={errors}
                         setErrors={setErrors}
                         />
                     ),
                 },
-                // {
-                //     path: "/infinite",
-                //     element: (
-                //         <BooksInfiniteScrollPage/>
-                //     ),
-                // }
             ]
         }
     ]);

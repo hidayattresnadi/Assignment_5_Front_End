@@ -54,10 +54,10 @@ const BorrowBookForm = ({ members, books, onSubmit}) => {
                     onChange={handleChange}
                     required
                 >
-                    <option value="">-- Select User --</option>
+                    <option value="" disabled>-- Select User --</option>
                     {members.map((user) => (
                         <option key={user.userId} value={user.userId}>
-                            {user.name}
+                            {`${user.firstName} ${user.lastName}`}
                         </option>
                     ))}
                 </select>

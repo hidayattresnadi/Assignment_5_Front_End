@@ -1,16 +1,17 @@
-import axios from 'axios';
 import { failedSwal, successSwal, validateInputMember } from '../../helper';
 import MemberForm from '../modules/memberForm'
 import FormLayout from '../templates/FormLayout';
-import { v4 as uuidv4 } from 'uuid';
 import LoadingSpinner from '../elements/loading';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import UserService from '../../services/userService';
 
 function MemberFormPage({ setErrors, editingMember, isFormOpen, setIsFormOpen, errors, setEditingMember }) {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [ErrorStatus, setErrorStatus] = useState();
+    const [navigate,setNavigate] =useState();
+    const navigate1 = useNavigate()
 
     const addMember = async (member) => {
         try {
@@ -18,14 +19,13 @@ function MemberFormPage({ setErrors, editingMember, isFormOpen, setIsFormOpen, e
             setErrors(listErrors);
     
             if (Object.keys(listErrors).length === 0) {
-                const id = uuidv4();
-                member.idIdentity = id;
-                await axios.post(`http://localhost:5184/User`, member)
+                await UserService.create(member); 
                 successSwal('Member Added successfully');
             }
             return listErrors;
             
         } catch (error) {
+            console.log(error.response.data.errors)
             failedSwal(error.response.data)
         }
        
@@ -39,7 +39,7 @@ function MemberFormPage({ setErrors, editingMember, isFormOpen, setIsFormOpen, e
             if (Object.keys(listErrors).length === 0) {
                 member.idIdentity = editingMember.idIdentity
                 // ga boleh nama duplikat
-                await axios.put(`http://localhost:5184/User/${id}`, member)
+                await UserService.update(id, member)
                 successSwal('Member Edited successfully');
                 setEditingMember(null);
             }
@@ -58,7 +58,7 @@ function MemberFormPage({ setErrors, editingMember, isFormOpen, setIsFormOpen, e
                     setIsFormOpen(true);
                     return;
                 }
-                const memberResponse = await axios.get(`http://localhost:5184/User/${id}`);
+                const memberResponse = await UserService.get(id);
                 setEditingMember(memberResponse.data);
                 setIsFormOpen(true);
             } catch (error) {
@@ -71,6 +71,12 @@ function MemberFormPage({ setErrors, editingMember, isFormOpen, setIsFormOpen, e
         loadData();
     }, [id,setIsFormOpen,setEditingMember]);
 
+    useEffect(() => {
+        if (navigate) {
+            navigate1('/members'); // Ganti '/books' dengan path tujuanmu
+        }
+    }, [navigate, navigate1]);
+
     return (
         <>
             {loading ? <LoadingSpinner /> : ErrorStatus ? <div><h1>Terjadi Gangguan...</h1></div> :
@@ -82,6 +88,8 @@ function MemberFormPage({ setErrors, editingMember, isFormOpen, setIsFormOpen, e
                         isFormOpen={isFormOpen}
                         setIsFormOpen={setIsFormOpen}
                         errors={errors}
+                        navigate={navigate}
+                        setNavigate={setNavigate}
                     />
                 </FormLayout>
             }

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Swal from 'sweetalert2'
 export function successSwal(message) {
     const Toast = Swal.mixin({
@@ -61,22 +60,19 @@ export function validateInputBook(book) {
     return newErrors;
 }
 
-export async function validateInputMember(member) {
+export function validateInputMember(member) {
     const newErrors = {};
-        if (!member.fullName) {
-            newErrors.fullName = 'Name is required'
+        if (!member.firstName) {
+            newErrors.firstName = 'First Name is required'
         }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email)) {
-            newErrors.email = 'Invalid email format';
+        if (!member.lastName) {
+            newErrors.lastName = 'Last Name is required'
         }
-        if (!/^\+62\d{9,13}$/.test(member.phoneNumber)) {
-            newErrors.phone = 'Phone number must start with +62 and contain 9-13 digits';
+        if (!member.position) {
+            newErrors.position = 'Position is required'
         }
-        if (member.address.length < 200) {
-            newErrors.address = 'address minimal characters should be 200'
-        }
-        if (!member.gender) {
-            newErrors.gender = 'gender is required'
+        if (!member.privilege) {
+            newErrors.privilege = 'Privilege is required'
         }
     return newErrors;
 }
@@ -89,3 +85,32 @@ export function failedSwal(error){
         footer: '<a href="">Why do I have this issue?</a>'
       })
 }
+
+const getOrdinalSuffix = (day) => {
+    if (day > 3 && day < 21) return 'th'; // Untuk 4-20 selalu "th"
+    const lastDigit = day % 10;
+    if (lastDigit === 1) return 'st';
+    if (lastDigit === 2) return 'nd';
+    if (lastDigit === 3) return 'rd';
+    return 'th';
+};
+
+export const formatDateWithOrdinal = (dateTime) => {
+    const date = new Date(dateTime);
+    const year = date.getFullYear();
+    const month = date.toLocaleString('en-US', { month: 'long' });
+    const day = date.getDate();
+    const ordinal = getOrdinalSuffix(day);
+
+    return `${month} ${day}${ordinal}, ${year}`;
+};
+
+export const formatDateOnly = (dateTime) => {
+    const date = new Date(dateTime);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+};
+

@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 import MemberDetailCard from '../modules/memberCard';
 import DetailLayout from '../templates/detailLayout';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import LoadingSpinner from '../elements/loading';
+import UserService from '../../services/userService';
 
 function MemberDetailPage({ setEditingMember, editingMember }) {
     const { id } = useParams();
@@ -13,7 +13,7 @@ function MemberDetailPage({ setEditingMember, editingMember }) {
     useEffect(() => {
         const myFetch = async () => {
             try {
-                const response = await axios.get(`http://localhost:5184/User/${id}`);
+                const response = await UserService.get(id)
                 setEditingMember(response.data);
             } catch (error) {
                 setError('Failed to fetch book details');

@@ -5,11 +5,9 @@ import Icon from '../elements/icon';
 const TableMemberRow = ({ member, onEdit, onDelete, onDetail }) => (
     <tr>
         <TableCell>{member.userId}</TableCell>
-        <TableCell>{member.name}</TableCell>
-        <TableCell>{member.email}</TableCell>
-        <TableCell>{member.gender}</TableCell>
-        <TableCell>{member.phoneNumber}</TableCell>
-        <TableCell>{member.address}</TableCell>
+        <TableCell>{`${member.firstName} ${member.lastName}`}</TableCell>
+        <TableCell>{member.position}</TableCell>
+        <TableCell>{member.privilege}</TableCell>
         <TableCell>
             <Button onClick={onEdit} className="btn btn-primary" ariaLabel="Edit Book">
                 <Icon className="fas fa-pencil-alt" />

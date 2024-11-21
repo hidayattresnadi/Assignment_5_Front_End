@@ -1,37 +1,30 @@
 import { useState, useEffect, useRef } from 'react';
 import InputField from '../widgets/inputField';
 import Button from '../elements/button';
-import { useNavigate } from 'react-router-dom';
-import RadioGroup from './radioGroup';
-import LabeledTextArea from '../widgets/labeledTextArea';
 
-const MemberForm = ({ addMember, updateMember, editingMember, isFormOpen, setIsFormOpen, errors }) => {
-    const navigate = useNavigate();
+const MemberForm = ({ addMember, updateMember, editingMember, isFormOpen, setIsFormOpen, errors, navigate, setNavigate }) => {
     const fullNameInputRef = useRef();
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        gender: '',
-        address: '',
-        phoneNumber: ''
+        firstName: '',
+        lastName: '',
+        position: '',
+        privilege: '',
     });
 
     useEffect(() => {
         if (editingMember) {
             setFormData({
-                name: editingMember.name,
-                email: editingMember.email,
-                gender: editingMember.gender,
-                address: editingMember.address,
-                phoneNumber: editingMember.phoneNumber
+                firstName: editingMember.firstName,
+                lastName: editingMember.lastName,
+                position: editingMember.position,
+                privilege: editingMember.privilege
             });
         } else {
             setFormData({
-                name: '',
-                email: '',
-                gender: '',
-                address: '',
-                phoneNumber: ''
+                firstName: '',
+                lastName: '',
+                position: '',
+                privilege: ''
             });
         }
     }, [editingMember]);
@@ -55,29 +48,27 @@ const MemberForm = ({ addMember, updateMember, editingMember, isFormOpen, setIsF
 
         if (editingMember) {
             const result = await updateMember(formData);
-            if(Object.keys(result).length === 0){
-                navigate('/members');
+            if (Object.keys(result).length === 0) {
                 setFormData({
-                    name: '',
-                    email: '',
-                    gender: '',
-                    address: '',
-                    phoneNumber: ''
+                    firstName: '',
+                    lastName: '',
+                    position: '',
+                    privilege: ''
                 });
                 setIsFormOpen(false);
+                setNavigate(!navigate);
             }
         } else {
             const result = await addMember(formData);
-            if(Object.keys(result).length === 0){
+            if (Object.keys(result).length === 0) {
                 setFormData({
-                    name: '',
-                    email: '',
-                    gender: '',
-                    address: '',
-                    phoneNumber: ''
+                    firstName: '',
+                    lastName: '',
+                    position: '',
+                    privilege: ''
                 });
                 setIsFormOpen(false);
-                navigate('/members')
+                setNavigate(!navigate);
             }
         }
     };
@@ -86,55 +77,42 @@ const MemberForm = ({ addMember, updateMember, editingMember, isFormOpen, setIsF
         setIsFormOpen(true);
     };
 
-    const options = [
-        { label: "Female", value: "Female" },
-        { label: "Male", value: "Male" }
-    ];
-
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <InputField
-                    label="Full Name"
+                    label="First Name"
                     type="text"
                     ref={fullNameInputRef}
-                    id="name"
-                    value={formData.name}
+                    id="firstName"
+                    value={formData.firstName}
                     onChange={handleInputChange}
                 />
-                {errors?.fullName ? <h6 className='text-start'>{errors.fullName}</h6> : ''}
+                {errors?.firstName ? <h6 className='text-start'>{errors.firstName}</h6> : ''}
                 <InputField
-                    label="Email"
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                />
-                {errors?.email ? <h6 className='text-start'>{errors.email}</h6> : ''}
-                <LabeledTextArea
-                    label="Address"
-                    id="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    placeholder="Enter your address"
-                />
-                {errors?.address ? <h6 className='text-start'>{errors.address}</h6> : ''}
-                <InputField
-                    label="Phone Number"
+                    label="Last Name"
                     type="text"
-                    placeholder='+628xxxxxxx'
-                    id="phoneNumber"
-                    value={formData.phoneNumber}
+                    id="lastName"
+                    value={formData.lastName}
                     onChange={handleInputChange}
                 />
-                {errors?.phone ? <h6 style={{marginBottom:'50px'}} className='text-start'>{errors.phone}</h6> : ''}
-                <RadioGroup
-                    options={options}
-                    name="gender"
-                    selectedValue={formData.gender}
+                {errors?.lastName ? <h6 className='text-start'>{errors.lastName}</h6> : ''}
+                <InputField
+                    label="Position"
+                    type="text"
+                    id="position"
+                    value={formData.position}
                     onChange={handleInputChange}
                 />
-                {errors?.gender ? <h6 className='text-start'>{errors.gender}</h6> : ''}
+                {errors?.position ? <h6 style={{ marginBottom: '50px' }} className='text-start'>{errors.position}</h6> : ''}
+                <InputField
+                    label="Privilege"
+                    type="text"
+                    id="privilege"
+                    value={formData.privilege}
+                    onChange={handleInputChange}
+                />
+                {errors?.privilege ? <h6 style={{ marginBottom: '50px' }} className='text-start'>{errors.privilege}</h6> : ''}
                 <Button onClick={openForm} type="submit" className="btn btn-primary mt-3 w-100">
                     Submit
                 </Button>
