@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 
-const BorrowBookForm = ({ members, books, onSubmit}) => {
+const BorrowBookForm = ({ members, books, onSubmit, title}) => {
     const [formData, setFormData] = useState({
         userId: "",
         bookIds: []
@@ -39,7 +39,7 @@ const BorrowBookForm = ({ members, books, onSubmit}) => {
 
     return (
         <form onSubmit={handleSubmit} className="container mt-4">
-            <h3 className="mb-4">Borrow Book</h3>
+            <h3 className="mb-4">{title}</h3>
 
             {/* User Dropdown */}
             <div className="mb-3">
@@ -87,7 +87,7 @@ const BorrowBookForm = ({ members, books, onSubmit}) => {
             </div>
 
             <button type="submit" className="btn btn-primary">
-                Borrow Books
+                {title}
             </button>
         </form>
     );

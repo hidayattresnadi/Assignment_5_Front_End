@@ -164,6 +164,20 @@ const AppRouter = () => {
                         />
                     ),
                 },
+                {
+                    path: "/return",
+                    element: (
+                        <BorrowFormPage
+                        members={members}
+                        setMembers={setMembers} 
+                        books={books}
+                        setBooks={setBooks}
+                        setErrors={setErrors}
+                        refresh ={refresh}
+                        setRefresh={setRefresh}
+                        />
+                    ),
+                },
             ]
         }
     ]);
